@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Server Metrics Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 20px; }
+        .container { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.1); }
+        h1 { border-bottom: 2px solid #333; }
+        table { width: 100%; margin-top: 10px; border-collapse: collapse; }
+        th, td { padding: 8px 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        .section { margin-top: 30px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📈 Server Metrics Dashboard</h1>
+
+        <div class="section">
+            <h2>🖥 System Info</h2>
+            <table>
+                <tr><th>Platform</th><td><%= system.platform %> (<%= system.arch %>)</td></tr>
+                <tr><th>Node.js Version</th><td><%= system.nodeVersion %></td></tr>
+                <tr><th>Uptime</th><td><%= system.uptime %> seconds</td></tr>
+                <tr><th>CPU Load (1/5/15 min)</th><td><%= system.cpuLoad.join(', ') %></td></tr>
+                <tr><th>Memory RSS</th><td><%= system.memory.rss %></td></tr>
+                <tr><th>Heap Total</th><td><%= system.memory.heapTotal %></td></tr>
+                <tr><th>Heap Used</th><td><%= system.memory.heapUsed %></td></tr>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>📦 App Metrics</h2>
+            <table>
+                <tr><th>Total Requests</th><td><%= app.totalRequests %></td></tr>
+                <tr><th>Cache Keys</th><td><%= app.cacheStats.keys %></td></tr>
+                <tr><th>Cache Hits</th><td><%= app.cacheStats.hits %></td></tr>
+                <tr><th>Cache Misses</th><td><%= app.cacheStats.misses %></td></tr>
+                <tr><th>Cache Size (Bytes)</th><td><%= app.cacheStats.ksize %></td></tr>
+                <tr><th>Value Size</th><td><%= app.cacheStats.vsize %></td></tr>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>🕒 Cache TTLs</h2>
+            <table>
+                <tr><th>Key</th><th>TTL (seconds)</th></tr>
+                <% app.cacheTtls.forEach(item => { %>
+                    <tr>
+                        <td><%= item.key %></td>
+                        <td><%= item.ttl > 0 ? item.ttl : 'Expired' %></td>
+                    </tr>
+                <% }) %>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
